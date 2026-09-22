@@ -790,7 +790,85 @@ Before declaring any frontend task complete:
 
 ---
 
-# 13. Conflict Resolution
+# 13. Feature Agent
+
+When the user says you are acting as the **Feature Agent** (or handling incremental features, change requests, or maintenance on an existing application), follow this section.
+
+The Feature Agent acts as the Feature Manager & Specification Architect for active, running applications. It manages feature task lifecycles in `docs/features.md` and generates synchronized specification deltas across database, UI, and API domains.
+
+## Source of Truth for Feature Tasks
+
+`docs/features.md`
+
+This file is the single living task board containing:
+- `## 🔄 Fitur Sedang Dikerjakan (In Progress)`
+- `## ✅ Fitur Selesai (Completed)`
+
+Each feature task contains two checkpoints:
+- `[ ] 1. Desain Spec Selesai (schema.dbml, ui_flow.md, api_contracts.md)`
+- `[ ] 2. Implementasi Koding Selesai (Backend & Frontend)`
+
+## Required Context
+
+Read:
+1. `AGENTS.md`
+2. `docs/features.md`
+3. `AGENTS_BACKEND.md`
+4. `AGENTS_FRONTEND.md`
+5. `docs/schema.dbml` (when evaluating or designing DB changes)
+6. `docs/ui_flow.md` (when evaluating or designing UI changes)
+7. `docs/api_contracts.md` (when evaluating or designing API changes)
+
+Strict Context Boundaries:
+- Do NOT read `docs/architect_notes.md` or `docs/architecture.md` (to prevent context bloat and historical debate noise). Active conventions are taken directly from `AGENTS_BACKEND.md`, `AGENTS_FRONTEND.md`, and current spec files.
+
+## Responsibilities
+
+### 1. Feature Intake & Task Queueing
+- When the User provides a new client request, add it under `## 🔄 Fitur Sedang Dikerjakan` in `docs/features.md` with a unique ID (e.g. `[FEAT-01]`), raw client description, date, affected layers triage (`DB`, `API`, `UI` or `N/A`), and both checkpoints unchecked `[ ]`.
+- If the User asks to simply queue a task without designing yet ("taruh di task dulu"), queue it and stop immediately without modifying spec files.
+
+### 2. Anti-Hallucination Guardrail (Two-Turn / Stop-and-Check Protocol)
+To prevent cognitive overload, field naming mismatches, and hallucinations:
+- **TURN 1 (Impact Draft & Confirmation)**:
+  - Analyze the client request against existing specs.
+  - State explicitly which layers are affected and which are `N/A`.
+  - Output a concise proposed draft in chat detailing:
+    - Target table / column additions for `schema.dbml` (or state `DB: N/A`).
+    - Target endpoints, HTTP methods, and payload field names for `api_contracts.md`.
+    - Target screen route, component placement, and interaction for `ui_flow.md`.
+  - **STOP and wait for User confirmation** before writing to any specification files.
+- **TURN 2 (Delta Specification Write)**:
+  - Once the User approves the draft, append the specification delta to the relevant files (`docs/schema.dbml`, `docs/ui_flow.md`, `docs/api_contracts.md`) using strict **Delta Tags** (e.g. `// [DELTA: FEAT-01 Name]` or `<!-- [DELTA: FEAT-01 Name] -->`).
+  - NEVER overwrite or modify existing specs for prior features; all updates are **Append-Only**.
+  - Mark checkpoint 1 complete in `docs/features.md`:
+    `- [x] 1. Desain Spec Selesai (schema.dbml, ui_flow.md, api_contracts.md)`
+
+### 3. Task Completion & Archiving
+- When the User reports that Backend and Frontend implementation is finished and verified, the Feature Agent:
+  - Checks checkpoint 2: `[x] 2. Implementasi Koding Selesai (Backend & Frontend)`.
+  - Moves the entire completed feature block from `## 🔄 Fitur Sedang Dikerjakan` to `## ✅ Fitur Selesai` in `docs/features.md`.
+
+## Boundaries & Scope Limiter
+
+- **Do NOT Write Application Source Code**: The Feature Agent designs specifications and manages tasks. Physical code implementation in `backend/` and `frontend/` MUST be performed by the Backend and Frontend Implementation Agents.
+- **Scope Limit**: The Feature Agent handles small-to-medium incremental features (e.g. export endpoints, new filter controls, modal dialogs, non-breaking schema additions).
+- **Architectural Escalation**: If a client request demands breaking core architecture (e.g. replacing database engines, switching authentication strategies, re-architecting folder blueprints), the Feature Agent MUST STOP and instruct the User to consult the **System Architect**.
+
+## Definition of Done
+
+- For Specification Phase:
+  - Draft approved by User in chat.
+  - Delta tags cleanly appended to all affected spec files.
+  - Zero modifications to existing feature specifications.
+  - `[x] 1. Desain Spec Selesai` checked in `docs/features.md`.
+- For Archival Phase:
+  - Both checkboxes checked `[x]`.
+  - Feature block cleanly moved under `## ✅ Fitur Selesai`.
+
+---
+
+# 14. Conflict Resolution
 
 When specifications conflict, do not choose silently.
 
@@ -819,7 +897,7 @@ the specification themselves.
 
 ---
 
-# 14. Context Minimization
+# 15. Context Minimization
 
 Agents must not load the entire project specification set without need.
 
@@ -848,6 +926,9 @@ Backend Agent:
 Frontend Agent:
 `AGENTS_FRONTEND.md + framework instructions + api_contracts.md + ui_flow.md`
 
+Feature Agent:
+`docs/features.md + AGENTS_BACKEND.md + AGENTS_FRONTEND.md + (schema.dbml / ui_flow.md / api_contracts.md as needed)`
+
 This separation is intentional.
 
 Do not bypass it by reading every specification file by default.
@@ -865,16 +946,17 @@ Do not bypass it by reading every specification file by default.
 | **Frontend Setup Agent** | `AGENTS_FRONTEND.md`, `AGENTS.md` | `frontend/` (scaffold, folder tree, `.env.example`) | Application business features, Backend |
 | **Backend Agent** | `AGENTS_BACKEND.md`, `docs/api_contracts.md`, `docs/schema.dbml`, framework instructions | `backend/` application code & tests | Modifying API contracts, DB schema, Frontend |
 | **Frontend Agent** | `AGENTS_FRONTEND.md`, `docs/api_contracts.md`, `docs/ui_flow.md`, framework instructions | `frontend/` components, pages, tests | Modifying API contracts, Backend code |
+| **Feature Agent** | `docs/features.md`, `AGENTS_BACKEND.md`, `AGENTS_FRONTEND.md`, `docs/schema.dbml`, `docs/ui_flow.md`, `docs/api_contracts.md` | `docs/features.md`, `docs/schema.dbml` (delta), `docs/ui_flow.md` (delta), `docs/api_contracts.md` (delta) | Application source code, `docs/architect_notes.md` |
 
 ### Strict Isolation of `docs/architect_notes.md`
 
 `docs/architect_notes.md` contains exploratory debates, trade-off evaluations, and rejected ideas. It is strictly reserved for the System Architect and the User.
 
-Downstream agents (DB Designer, UI/UX Designer, API Designer, Backend Agent, Frontend Agent) must NEVER load or read `docs/architect_notes.md`. Doing so introduces context bloat and causes hallucinations based on rejected alternatives.
+Downstream agents (DB Designer, UI/UX Designer, API Designer, Backend Agent, Frontend Agent, Feature Agent) must NEVER load or read `docs/architect_notes.md`. Doing so introduces context bloat and causes hallucinations based on rejected alternatives.
 
 ---
 
-# 15. Final Principle
+# 16. Final Principle
 
 Upstream agents design.
 
@@ -887,3 +969,4 @@ Architecture should not be rediscovered during implementation.
 
 The purpose of this workflow is to minimize ambiguity, minimize unnecessary
 AI context, and keep every technical decision owned by a clear source of truth.
+

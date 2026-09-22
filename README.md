@@ -36,6 +36,7 @@ Dirancang untuk mencegah **halusinasi AI**, **context bloat**, dan **kode berant
 | `docs/schema.dbml` | DB Designer | Skema database, entitas, primary/foreign keys, dan relasi. |
 | `docs/ui_flow.md` | UI/UX Designer | Struktur halaman, user journey, interaksi, dan state tampilan. |
 | `docs/api_contracts.md` | API Designer | Kontrak endpoint, method, payload JSON, status code, dan error. |
+| `docs/features.md` | **Feature Agent & User** | Papan pelacakan fitur tambahan/CR (Sedang Dikerjakan & Selesai). |
 | `backend/` | Backend Agent | Source code aplikasi backend. |
 | `frontend/` | Frontend Agent | Source code aplikasi frontend. |
 
@@ -85,6 +86,25 @@ Cukup panggil AI Anda dengan template prompt berikut di setiap tahapnya:
 
 ---
 
+### 8. Penambahan Fitur Baru / Change Request dari Klien (Feature Agent)
+*(Dipakai setelah aplikasi sudah berjalan untuk menangani revisi atau fitur tambahan dari klien)*
+
+- **Skenario A: Masukkan Ide/Permintaan ke Antrean Task Saja (Tanpa Desain Dulu)**
+  > *"Baca `AGENTS.md` Bagian 13. Kamu bertindak sebagai **Feature Agent**. Klien meminta fitur tambahan berikut: '[Salin pesan dari klien]'. Tolong catat ke `docs/features.md` di bagian Sedang Dikerjakan, tapi jangan buat desain spec dulu."*
+
+- **Skenario B: Mulai Rancang Desain Spec Delta (Two-Turn Anti-Halu)**
+  > *"Baca `AGENTS.md` Bagian 13. Kamu bertindak sebagai **Feature Agent**. Tolong buatkan desain spec delta untuk [FEAT-XX]. Tampilkan draft ringkas perubahannya (DB, API, UI) di chat dulu agar saya konfirmasi sebelum kamu menulis ke file."*  
+  *(Setelah Anda review draft di chat dan ketik "Lanjut/Oke", Feature Agent akan menuliskan delta ke file spec dan mencentang `[x] 1. Desain Spec Selesai`).*
+
+- **Skenario C: Koding Fitur (Panggil Backend & Frontend Dev)**
+  > *"Baca `AGENTS.md`. Kamu bertindak sebagai **Backend Agent**. Implementasikan endpoint dari delta [FEAT-XX] di `docs/api_contracts.md`."*  
+  > *"Baca `AGENTS.md`. Kamu bertindak sebagai **Frontend Agent**. Implementasikan tampilan dan koneksi data dari delta [FEAT-XX] di `docs/ui_flow.md`."*
+
+- **Skenario D: Tandai Fitur Selesai & Pindahkan Task**
+  > *"Baca `AGENTS.md` Bagian 13. Kamu bertindak sebagai **Feature Agent**. Implementasi koding untuk [FEAT-XX] sudah selesai dan diverifikasi. Tolong centang checklist nomor 2 dan pindahkan blok fitur ini ke bagian Fitur Selesai di `docs/features.md`."*
+
+---
+
 ## 🛡️ Matriks Isolasi Konteks (Anti-Halusinasi)
 
 Agar AI bekerja cepat dan tidak kelebihan konteks (*context bloat*), masing-masing peran hanya membaca file yang dibutuhkan:
@@ -99,9 +119,10 @@ Backend Setup Agent          → AGENTS_BACKEND.md
 Frontend Setup Agent         → AGENTS_FRONTEND.md
 Backend Agent                → AGENTS_BACKEND.md + api_contracts.md + schema.dbml
 Frontend Agent               → AGENTS_FRONTEND.md + api_contracts.md + ui_flow.md
+Feature Agent                → features.md + AGENTS_BACKEND.md + AGENTS_FRONTEND.md + (schema.dbml / ui_flow.md / api_contracts.md)
 ```
 
-> **Catatan Penting:** `docs/architect_notes.md` diisolasi khusus untuk SA & User. Agen hilir (DB, UI, Coder) tidak boleh membacanya agar terhindar dari bias alternatif yang sudah dibatalkan.
+> **Catatan Penting:** `docs/architect_notes.md` diisolasi khusus untuk SA & User. Agen hilir (DB, UI, Coder, Feature Agent) tidak boleh membacanya agar terhindar dari bias alternatif yang sudah dibatalkan.
 
 ---
 
@@ -115,6 +136,7 @@ Frontend Agent               → AGENTS_FRONTEND.md + api_contracts.md + ui_flow
 | **AI DB Designer** | `Gemini 3.8 Flash High` | Butuh akurasi relasi & normalisasi skema |
 | **AI UI/UX Designer** | `Gemini 3.8 Flash High` | Butuh perancangan UX flow & state komprehensif |
 | **AI API Designer** | `Gemini 3.8 Flash High` | Butuh ketelitian struktur kontrak JSON |
+| **AI Feature Agent** | `Gemini 3.8 Flash High` | Butuh sinkronisasi presisi antar DB, UI, dan API delta |
 | **AI Backend Coder** | `Gemini 3.8 Flash Medium` *(Default)* | Eksekusi cepat, hemat token, dan akurat |
 | **AI Frontend Coder** | `Gemini 3.8 Flash Medium` *(Default)* | Eksekusi cepat, hemat token, dan akurat |
 
@@ -133,6 +155,7 @@ Frontend Agent               → AGENTS_FRONTEND.md + api_contracts.md + ui_flow
 | **AI DB Designer** | `Luna MAX` | Desain skema DBML presisi tinggi |
 | **AI UI/UX Designer** | `Luna MAX` | Perancangan interaksi dan state |
 | **AI API Designer** | `Luna MAX` | Kontrak API decoupled terstandar |
+| **AI Feature Agent** | `Luna MAX` | Sinkronisasi multi-domain spec delta tanpa halusinasi |
 | **AI Backend Coder** | `Luna HIGH` *(Default)* | Koding backend modular cepat |
 | **AI Frontend Coder** | `Luna HIGH` *(Default)* | Koding komponen frontend cepat |
 
