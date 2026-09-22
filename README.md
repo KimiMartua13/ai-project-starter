@@ -102,3 +102,40 @@ Frontend Agent               → AGENTS_FRONTEND.md + api_contracts.md + ui_flow
 ```
 
 > **Catatan Penting:** `docs/architect_notes.md` diisolasi khusus untuk SA & User. Agen hilir (DB, UI, Coder) tidak boleh membacanya agar terhindar dari bias alternatif yang sudah dibatalkan.
+
+---
+
+## 🤖 Strategi Pemilihan Model AI & Eskalasi
+
+### 1. Primary Environment: Antigravity IDE (Gemini Models)
+
+| Tahap / Peran Agen | Model Rekomendasi | Keterangan |
+| :--- | :--- | :--- |
+| **AI System Architect** | `Gemini 3.8 Flash High` | Butuh nalar arsitektur & sintesis kuat |
+| **AI DB Designer** | `Gemini 3.8 Flash High` | Butuh akurasi relasi & normalisasi skema |
+| **AI UI/UX Designer** | `Gemini 3.8 Flash High` | Butuh perancangan UX flow & state komprehensif |
+| **AI API Designer** | `Gemini 3.8 Flash High` | Butuh ketelitian struktur kontrak JSON |
+| **AI Backend Coder** | `Gemini 3.8 Flash Medium` *(Default)* | Eksekusi cepat, hemat token, dan akurat |
+| **AI Frontend Coder** | `Gemini 3.8 Flash Medium` *(Default)* | Eksekusi cepat, hemat token, dan akurat |
+
+**Troubleshooting & Escalation Ladder (Tangga Eskalasi):**
+- Jika `Flash Medium` gagal/stuck $\rightarrow$ Naik ke `Flash High`
+- Jika `Flash High` masih gagal $\rightarrow$ Naik ke `Gemini Pro`
+
+---
+
+### 2. Fallback Environment: Codex (Luna Models)
+*(Digunakan jika limit di Antigravity IDE atau menggunakan Codex CLI)*
+
+| Tahap / Peran Agen | Model Rekomendasi | Keterangan |
+| :--- | :--- | :--- |
+| **AI System Architect** | `Luna MAX` | Penalaran arsitektur level tertinggi |
+| **AI DB Designer** | `Luna MAX` | Desain skema DBML presisi tinggi |
+| **AI UI/UX Designer** | `Luna MAX` | Perancangan interaksi dan state |
+| **AI API Designer** | `Luna MAX` | Kontrak API decoupled terstandar |
+| **AI Backend Coder** | `Luna HIGH` *(Default)* | Koding backend modular cepat |
+| **AI Frontend Coder** | `Luna HIGH` *(Default)* | Koding komponen frontend cepat |
+
+**Troubleshooting & Escalation Ladder (Tangga Eskalasi):**
+- Jika `Luna Medium` gagal $\rightarrow$ Naik ke `Luna High`
+- Jika `Luna High` gagal $\rightarrow$ Naik ke Model tertinggi (Escalate Model)
