@@ -1,54 +1,48 @@
-# ui_flow.md
+# UI/UX Flow
 
-<!--
-This file is generated/re-written by the UI/UX Designer.
-Context sources: docs/architecture.md + AGENTS_FRONTEND.md
-Defines screens, navigation, user flows, UI interactions, and responsive states.
--->
+**Status:** BELUM DIISI
+**Persetujuan User:** BELUM ADA
 
-## 1. Screen Inventory & Route Map
-<!--
-List all pages/screens, URL routes, and access levels (Public / Guest / Auth / Admin):
+Dokumen ini menyimpan draft dan spesifikasi UI/UX final di tempat yang sama. Isi proyek nyata menggantikan seluruh penanda `[isi]`. Ulangi rincian per peran, halaman, dan alur sesuai kebutuhan proyek. Saat masih DRAFT, tandai keputusan yang merupakan usulan UI/UX dan pertanyaan yang perlu dijawab; sebelum FINAL, selesaikan pertanyaan, hapus alternatif yang ditolak, dan isi persetujuan User dengan tanggal serta cakupan versi yang disetujui.
 
-- `/` -> Landing / Home Page (Public)
-- `/login` -> Login Page (Guest only)
-- `/dashboard` -> Main Dashboard (Auth required)
--->
+## 1. Menu dan navigasi per peran
 
----
+- **Peran pengguna:** [isi]
+- **Susunan menu dan submenunya:** [isi]
+- **Label, tujuan route, dan akses setiap menu:** [isi]
+- **Halaman tanpa menu serta cara pengguna mencapainya:** [isi]
+- **Perilaku ketika peran tidak berhak mengakses route:** [isi]
 
-## 2. User Journey & Navigation Flows
-<!--
-Describe key interaction flows and step-by-step user journeys:
+## 2. Inventaris halaman dan route
 
-### Flow A: User Registration & Onboarding
-1. User visits `/register`, fills in form (Name, Email, Password).
-2. Clicks "Daftar".
-3. Success: Redirects to `/verify-email` or `/dashboard`.
-4. Error: Displays inline field errors with clear feedback.
--->
+- **Halaman/layar dan tujuan masing-masing:** [isi]
+- **Route, parameter route, dan tingkat akses:** [isi]
+- **Hubungan antarhalaman serta titik masuk dan keluarnya:** [isi]
 
----
+## 3. Alur pengguna dan interaksi
 
-## 3. Screen State Definitions
-<!--
-Define behavior across 4 essential UI states:
+- **Peran dan tujuan alur:** [isi]
+- **Langkah pengguna dari awal sampai hasil akhir:** [isi]
+- **Tindakan, formulir, konfirmasi, validasi yang terlihat, dan umpan balik:** [isi]
+- **Pembatalan, pengulangan, serta kegagalan yang dapat dipulihkan:** [isi]
 
-### [Screen Name]: e.g., Dashboard
-- **Initial / Loading State**: Skeleton shimmer placeholder cards.
-- **Empty State**: Friendly illustration + "Belum ada data" + Call-to-action button.
-- **Success State**: Populated metrics, interactive data table with pagination.
-- **Error State**: Toast error alert with "Gagal memuat data. [Coba Lagi]" retry button.
--->
+## 4. State setiap halaman utama
 
----
+- **Halaman:** [isi]
+- **Loading:** [isi]
+- **Empty:** [isi]
+- **Success:** [isi]
+- **Error:** [isi]
+- **Perbedaan tampilan menurut peran, perangkat, atau status data:** [isi]
 
-## 4. Required Data per Screen (Feed to API Designer)
-<!--
-Summarize the exact data required by each screen so the API Designer can build matching endpoints:
+## 5. Data yang dibutuhkan setiap halaman
 
-### [Screen Name]: e.g., Dashboard
-- Requires: `user.profile` (name, avatar, role)
-- Requires: `metrics.summary` (total_sales, active_users)
-- Requires: `orders.recent` (list of latest 5 orders)
--->
+- **Halaman dan atribut data yang ditampilkan:** [isi]
+- **Data yang dikirim atau diubah melalui interaksi:** [isi]
+- **Kebutuhan pencarian, filter, urutan, paginasi, unggah, atau unduh:** [isi]
+
+## 6. Catatan review selama DRAFT
+
+- **Kebutuhan eksplisit dari pemilik proyek yang harus tercermin di UI:** [isi]
+- **Usulan keputusan UI/UX yang menunggu penilaian User:** [isi]
+- **Pertanyaan, konflik, dan bagian yang perlu direvisi:** [isi]

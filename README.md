@@ -13,9 +13,9 @@ Dirancang untuk mencegah **halusinasi AI**, **context bloat**, dan **kode berant
    ↓
 2. System Architect (docs/architect_notes.md → AGENTS_BACKEND.md & AGENTS_FRONTEND.md)
    ↓
-3. DB Designer (docs/schema.dbml)  +  UI/UX Designer (docs/ui_flow.md)
+3. DB Designer (docs/schema.dbml)  +  UI/UX Designer (docs/ui_flow.md: DRAFT → review User → FINAL)
    ↓
-4. API Designer (docs/api_contracts.md)
+4. API Designer (docs/api_contracts.md; hanya setelah UI flow FINAL)
    ↓
 5. Setup / Installation (backend/ & frontend/)
    ↓
@@ -34,7 +34,7 @@ Dirancang untuk mencegah **halusinasi AI**, **context bloat**, dan **kode berant
 | `AGENTS_BACKEND.md` | System Architect | Panduan implementasi backend (stack, folder, port, `.env`). |
 | `AGENTS_FRONTEND.md` | System Architect | Panduan implementasi frontend (stack, UI library, port, `.env`). |
 | `docs/schema.dbml` | DB Designer | Skema database, entitas, primary/foreign keys, dan relasi. |
-| `docs/ui_flow.md` | UI/UX Designer | Struktur halaman, user journey, interaksi, dan state tampilan. |
+| `docs/ui_flow.md` | UI/UX Designer | Satu file untuk draft dan hasil final: menu per peran, route, user journey, interaksi, dan state tampilan. API menunggu status FINAL yang disetujui User. |
 | `docs/api_contracts.md` | API Designer | Kontrak endpoint, method, payload JSON, status code, dan error. |
 | `docs/features.md` | **Feature Agent & User** | Papan pelacakan fitur tambahan/CR (Sedang Dikerjakan & Selesai). |
 | `.agents/skills/spec-consistency-review/SKILL.md` | Reviewer spesifikasi | Prosedur pemeriksaan konsistensi spec sebelum checkpoint desain selesai; tunduk pada batas konteks di `AGENTS.md`. |
@@ -70,10 +70,20 @@ Skill `spec-consistency-review` tersedia dari `.agents/skills/` setelah template
 > *"Baca `AGENTS.md`. Kamu bertindak sebagai **DB Designer**. Rancang skema database di `docs/schema.dbml` berdasarkan `docs/architecture.md` dan konvensi di `AGENTS_BACKEND.md`."*
 
 ### 4. Merancang Tampilan & Alur (UI/UX Designer)
-> *"Baca `AGENTS.md`. Kamu bertindak sebagai **UI/UX Designer**. Rancang alur halaman dan state interaksi di `docs/ui_flow.md` berdasarkan `docs/architecture.md` dan batasan di `AGENTS_FRONTEND.md`."*
+
+- **Buat draft yang tersimpan di file:**
+  > *"Baca `AGENTS.md`. Kamu bertindak sebagai **UI/UX Designer**. Berdasarkan `docs/architecture.md` dan `AGENTS_FRONTEND.md`, tulis draft menu per peran, hierarki, route, alur pengguna, state interaksi, dan kebutuhan data halaman di `docs/ui_flow.md`. Tandai status `DRAFT` dan persetujuan `BELUM ADA`. Bedakan kebutuhan User dari usulan UI/UX, sebutkan pertanyaan yang belum terjawab, lalu ringkas bagian yang perlu saya tinjau. Jangan tandai FINAL."*
+
+- **Revisi setelah meninjau draft:**
+  > *"Sebagai UI/UX Designer, perbaiki draft di `docs/ui_flow.md` berdasarkan masukan saya berikut: [isi masukan]. Pertahankan status DRAFT dan tunjukkan bagian yang berubah serta pertanyaan yang masih terbuka."*
+
+- **Finalisasi hanya setelah Anda benar-benar menyetujui versi draft saat ini:**
+  > *"Saya sudah meninjau dan menyetujui draft `docs/ui_flow.md` saat ini. Sebagai UI/UX Designer, pastikan tidak ada pertanyaan atau placeholder yang belum selesai, catat tanggal dan cakupan persetujuan saya di file, lalu ubah statusnya menjadi FINAL."*
+
+Draft tetap tersimpan di `docs/ui_flow.md` meski chat berganti. Bila Anda belum setuju, revisi file yang sama dan biarkan statusnya DRAFT. Perubahan material oleh UI/UX Designer setelah FINAL harus kembali melalui review User; perubahan fitur saat aplikasi sudah berjalan mengikuti protokol Feature Agent.
 
 ### 5. Merancang Kontrak API (API Designer)
-> *"Baca `AGENTS.md`. Kamu bertindak sebagai **API Designer**. Susun kontrak API lengkap di `docs/api_contracts.md` berdasarkan keputusan backend di `AGENTS_BACKEND.md`, skema di `docs/schema.dbml`, dan kebutuhan layar di `docs/ui_flow.md`."*
+> *"Baca `AGENTS.md`. Kamu bertindak sebagai **API Designer**. Pastikan `docs/ui_flow.md` berstatus FINAL dan persetujuan User untuk versi saat ini tercatat. Jika belum, berhenti dan laporkan bahwa review UI/UX belum selesai. Jika sudah, susun kontrak API lengkap di `docs/api_contracts.md` berdasarkan `docs/architecture.md`, keputusan backend di `AGENTS_BACKEND.md`, skema di `docs/schema.dbml`, dan kebutuhan layar di `docs/ui_flow.md`."*
 
 ### 6. Inisialisasi Proyek & Pembuatan Folder Fisik (Installation Phase)
 *(Disarankan dipisah jadi 2 request agar terminal stabil dan tidak timeout)*

@@ -20,7 +20,7 @@ Do not perform another agent's responsibility unless explicitly instructed.
 ## Critical Rules (Golden Directives)
 
 Before performing any action, every agent must adhere strictly to these core rules:
-1. **Never Invent Missing Information**: Follow the Zero-Assumption Protocol. If anything is ambiguous or missing, STOP and ask the User.
+1. **Never Invent Missing Information**: Follow the Zero-Assumption Protocol. If anything is ambiguous or missing, STOP and ask the User. The UI/UX Designer may record clearly labeled proposals and open questions in a DRAFT for User review under Section 8; these are not approved decisions.
 2. **Preflight Check First**: Never start working on empty or starter template specification files. Verify upstream readiness before proceeding.
 3. **Read Only Assigned Context**: Load only the documents specified in your role's context matrix to prevent context bloat.
 4. **Modify Only Owned Files**: Never alter files owned by another agent. Adhere strictly to the Agent I/O Access Matrix.
@@ -169,6 +169,7 @@ Source of truth:
 It defines:
 
 - pages/screens
+- menu hierarchy and visibility by user role
 - navigation
 - user flows
 - interaction behavior
@@ -177,6 +178,12 @@ It defines:
 - success states
 - error states
 - relevant user-facing behavior
+
+The UI/UX Designer may record a reviewable proposal in this same file with
+`**Status:** DRAFT`. It becomes the approved source for downstream design and
+implementation only when the User explicitly approves the current draft and
+the UI/UX Designer marks it `**Status:** FINAL`. A draft is never treated as an
+approved UI decision.
 
 ## API
 
@@ -214,12 +221,14 @@ All agents must follow these rules without exception.
    - Explicitly identify the missing requirement.
    - Ask the User for clarification.
    - Stop execution before generating downstream specifications or code that depend on it.
+   - For the UI/UX Designer only, a DRAFT may contain clearly labeled proposals and open questions for User review. Do not treat them as settled requirements or mark the draft FINAL until the User resolves them.
 
 4. Preflight Readiness Check:
    Before beginning work, every agent must perform a preflight verification:
    - Are all required upstream specification documents available?
    - Are upstream documents populated with real project requirements (not empty, and not initial example templates)?
    - If upstream documents are empty or still unconfigured (e.g. `AGENTS_BACKEND.md` is empty, `docs/api_contracts.md` still only contains starter examples), STOP immediately and report that the upstream phase is incomplete.
+   - If `docs/ui_flow.md` is required as upstream context, require `**Status:** FINAL` and a recorded explicit User approval for that version. `BELUM DIISI`, `DRAFT`, a missing status, or an unresolved UI decision means the UI phase is incomplete; STOP before generating dependent specifications or code. This check applies to the API Designer, Frontend Implementation Agent, and Feature Agent when they depend on the UI flow.
 
 5. Do not redesign decisions owned by another agent.
 
@@ -478,7 +487,7 @@ The UI/UX Designer owns application interaction design.
 Responsibilities include:
 
 - defining screens/pages aligned with frontend platform capabilities
-- defining navigation
+- defining menu hierarchy, navigation routes, and visibility per user role
 - defining user flows
 - defining user interactions
 - defining loading states
@@ -490,9 +499,18 @@ Responsibilities include:
 
 ## Output
 
-Rewrite:
+Create and revise the same canonical file:
 
 `docs/ui_flow.md`
+
+Do not create a separate UI proposal or review file.
+
+## UI Draft and User Review Gate
+
+1. **Draft:** After the upstream preflight passes, write a reviewable proposal to `docs/ui_flow.md` with `**Status:** DRAFT` and `**Persetujuan User:** BELUM ADA`. Include the menu and route map per role, key journeys, important interactions and states, and data needed by each screen. Distinguish explicit User requirements from UI/UX proposals; label open questions instead of presenting them as decisions. If a missing business rule prevents a coherent draft, ask the User before writing that dependent part.
+2. **Review and revision:** Show the User what was drafted and which decisions need review. Incorporate feedback in `docs/ui_flow.md` itself. Keep the status `DRAFT` while any material menu, route, permission, flow, state, or screen-data decision remains unapproved. The draft persists across chats; do not rely on chat history as the only record.
+3. **Finalization:** Only after the User explicitly approves the current draft, resolve all open questions and remove rejected alternatives. Verify it against `docs/architecture.md` and `AGENTS_FRONTEND.md`, record the approval date and scope in `**Persetujuan User:**`, then set `**Status:** FINAL`. Do not infer approval from silence, a completed draft, or an earlier version's approval.
+4. **Later material revision by the UI/UX Designer:** Change the status back to `DRAFT` and request approval for the revised version before restoring `FINAL`. Approved incremental changes managed by the Feature Agent follow Section 13's separate approval protocol.
 
 ## Boundaries
 
@@ -509,6 +527,8 @@ report the architectural issue.
 ## Definition of Done
 
 `docs/ui_flow.md` is complete only when:
+- Its status is `FINAL` and explicit User approval for the current version is recorded.
+- Menus, their hierarchy, route destinations, and visibility per user role are defined.
 - All user roles and screen routes are inventoried.
 - Step-by-step navigation flows for key user journeys are described.
 - Essential UI states (Loading, Empty, Success, Error) are documented for key screens.
@@ -535,6 +555,11 @@ Read:
 ## Responsibilities
 
 The API Designer owns the contract between frontend and backend.
+
+Before designing or writing `docs/api_contracts.md`, verify that
+`docs/ui_flow.md` says `**Status:** FINAL`, records explicit User approval for
+the current version, and contains no unresolved UI questions or starter
+placeholders. If any check fails, STOP and report that UI/UX review is pending.
 
 Responsibilities include:
 
@@ -737,6 +762,10 @@ Read:
 4. `docs/api_contracts.md`
 5. `docs/ui_flow.md`
 
+Treat `docs/ui_flow.md` as implementation-ready only when it is `FINAL` and
+records explicit User approval for the current version. Otherwise, STOP before
+implementing dependent UI behavior.
+
 Do not read `docs/architecture.md` by default.
 
 The architectural information required for frontend implementation
@@ -853,9 +882,11 @@ To prevent cognitive overload, field naming mismatches, and hallucinations:
 - **TURN 2 (Controlled Canonical Revision)**:
   - Once the User approves the draft, record the approved design decisions separately from the raw client request in the feature block in `docs/features.md`.
   - Change only the definitions named in the approved draft in the relevant canonical files (`docs/schema.dbml`, `docs/ui_flow.md`, `docs/api_contracts.md`). Edit an existing table, screen, or endpoint in place when its definition changes; add a new definition only when the approved feature requires one.
+  - If `docs/ui_flow.md` changes, keep it `DRAFT` while revising. Approval of an earlier UI revision does not cover this one.
   - Record which definitions changed in the feature block. Do not alter unrelated definitions or silently reinterpret an earlier feature. If the edit exposes a conflict or requires a decision outside the approved draft, stop that part and ask the User before proceeding.
   - Review the Git diff and verify that every approved decision appears in the relevant spec, DBML remains valid, UI data needs are served by the API, and API fields agree with the schema. Report the changed definitions and verification result to the User.
   - Run the repository `spec-consistency-review` skill on the affected definitions. Resolve findings before marking the design checkpoint complete; report unresolved conflicts to the User.
+  - If the approved feature changed `docs/ui_flow.md` and all checks pass, update `**Persetujuan User:**` with the feature ID, approval date, and approved scope for the current revision, then restore `**Status:** FINAL`.
   - Only after these checks pass, mark checkpoint 1 complete in `docs/features.md`:
     `- [x] 1. Desain Spec Selesai (schema.dbml, ui_flow.md, api_contracts.md)`
 
