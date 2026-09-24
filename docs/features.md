@@ -15,6 +15,8 @@ Format penambahan fitur baru di bawah ini:
 - **Request Klien (Raw)**: "Salinan pesan/permintaan asli dari klien..."
 - **Tanggal Masuk**: YYYY-MM-DD
 - **Dampak Layer**: DB (Perlu/NA) | API (Perlu/NA) | UI (Perlu/NA)
+- **Keputusan Desain Disetujui**: Isi setelah draft disetujui User; pisahkan dari permintaan mentah.
+- **Definisi Spec yang Diubah**: Sebut tabel/kolom, screen/route, dan endpoint yang terdampak; isi setelah revisi terverifikasi.
 - **Checklist Kesiapan**:
   - [ ] 1. Desain Spec Selesai (schema.dbml, ui_flow.md, api_contracts.md)
   - [ ] 2. Implementasi Koding Selesai (Backend & Frontend)
