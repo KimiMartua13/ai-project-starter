@@ -55,7 +55,7 @@ Skill `spec-consistency-review` tersedia dari `.agents/skills/` setelah template
 - **Mulai Debat Backend:**
   > *"Baca `AGENTS.md`. Kamu bertindak sebagai **System Architect**. Mari kita bahas arsitektur **BACKEND** saja dulu berdasarkan `docs/architecture.md`. Catat semua kesepakatan dan pertimbangan kita di `docs/architect_notes.md` Bagian A (Backend)."*
 - **Kompilasi ke File:**
-  > *"Debat backend selesai. Tolong baca kembali `docs/architect_notes.md` Bagian A, lalu buatkan instruksi implementasi final yang rapi di `AGENTS_BACKEND.md`."*
+  > *"Debat backend selesai. Sebelum menyusun `AGENTS_BACKEND.md`, cocokkan `docs/architecture.md`, `docs/architect_notes.md` Bagian A, dan kesepakatan dalam sesi ini. Catat di Bagian A kesepakatan yang belum tercatat. Jika ada konflik atau keputusan wajib yang belum jelas, tanyakan kepada saya sebelum memfinalkan. Setelah konsisten, tulis `AGENTS_BACKEND.md` sesuai aturan System Architect di `AGENTS.md`."*
 
 ---
 
@@ -64,7 +64,7 @@ Skill `spec-consistency-review` tersedia dari `.agents/skills/` setelah template
 - **Mulai Debat Frontend:**
   > *"Baca `AGENTS.md`. Kamu bertindak sebagai **System Architect**. Sekarang mari kita bahas arsitektur **FRONTEND** berdasarkan `docs/architecture.md` dan gunakan `AGENTS_BACKEND.md` yang sudah final sebagai acuan port & auth. Catat kesepakatan kita di `docs/architect_notes.md` Bagian B (Frontend)."*
 - **Kompilasi ke File:**
-  > *"Debat frontend selesai. Tolong baca kembali `docs/architect_notes.md` Bagian B, lalu buatkan instruksi implementasi final yang rapi di `AGENTS_FRONTEND.md`."*
+  > *"Debat frontend selesai. Sebelum menyusun `AGENTS_FRONTEND.md`, cocokkan `docs/architecture.md`, `AGENTS_BACKEND.md`, `docs/architect_notes.md` Bagian B, dan kesepakatan dalam sesi ini. Catat di Bagian B kesepakatan yang belum tercatat. Jika ada konflik atau keputusan wajib yang belum jelas, tanyakan kepada saya sebelum memfinalkan. Setelah konsisten, tulis `AGENTS_FRONTEND.md` sesuai aturan System Architect di `AGENTS.md`."*
 
 ### 3. Merancang Database (DB Designer)
 > *"Baca `AGENTS.md`. Kamu bertindak sebagai **DB Designer**. Rancang skema database di `docs/schema.dbml` berdasarkan `docs/architecture.md` dan konvensi di `AGENTS_BACKEND.md`."*

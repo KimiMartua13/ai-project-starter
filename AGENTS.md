@@ -825,6 +825,7 @@ Before declaring any frontend task complete:
 - Request payloads and response parsing must strictly match property names and casing defined in `docs/api_contracts.md`.
 - Component interaction and UI states (loading, empty, error, success) must match `docs/ui_flow.md`.
 - Run available linter, typecheck, or build commands to verify there are no broken imports or compilation errors.
+- After the required backend is available, run the application and verify the implemented user flow through the UI, API response, and expected result or data change, if applicable. Check the successful path and one relevant failure condition against `docs/ui_flow.md` and `docs/api_contracts.md`. Report the steps, results, and anything that could not be verified. If the backend is not yet available, report integration verification as pending; do not claim the end-to-end flow passed.
 
 ---
 
@@ -891,9 +892,10 @@ To prevent cognitive overload, field naming mismatches, and hallucinations:
     `- [x] 1. Desain Spec Selesai (schema.dbml, ui_flow.md, api_contracts.md)`
 
 ### 3. Task Completion & Archiving
-- When the User reports that Backend and Frontend implementation is finished and verified, the Feature Agent:
+- When the User reports that Backend and Frontend implementation is finished and the relevant UI-to-API flow has been verified on the running application, the Feature Agent:
   - Checks checkpoint 2: `[x] 2. Implementasi Koding Selesai (Backend & Frontend)`.
   - Moves the entire completed feature block from `## 🔄 Fitur Sedang Dikerjakan` to `## ✅ Fitur Selesai` in `docs/features.md`.
+- A build or typecheck alone does not count as integration verification. The Feature Agent records the User's verification report; it does not perform implementation work.
 
 ## Boundaries & Scope Limiter
 
